@@ -1,8 +1,5 @@
 package H2O;
 
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -29,16 +26,31 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
  */
 
-class H2O_2  implements IH2O{
-    private AtomicInteger mAtomicInteger = new AtomicInteger(0);
+class H2O_2 implements IH2O {
+    private final Object H = new Object();
+    private final AtomicInteger mHAtomicInteger = new AtomicInteger(0);
 
     public void hydrogen(Runnable releaseHydrogen) throws InterruptedException {
-        // releaseHydrogen.run() outputs "H". Do not change or remove this line.
-        releaseHydrogen.run();
+        synchronized (H) {
+            int a = mHAtomicInteger.incrementAndGet();
+            if (a > 1) {
+                H.wait();
+            }
+            // releaseHydrogen.run() outputs "H". Do not change or remove this line.
+            releaseHydrogen.run();
+        }
     }
 
     public void oxygen(Runnable releaseOxygen) throws InterruptedException {
-        // releaseOxygen.run() outputs "O". Do not change or remove this line.
-        releaseOxygen.run();
+        synchronized (H) {
+            // releaseHydrogen.run() outputs "H". Do not change or remove this line.
+            releaseOxygen.run();
+            if (mHAtomicInteger.get() == 1) {
+                H.notify();
+            } else if (mHAtomicInteger.get() >= 2) {
+                H.notify();
+                H.notify();
+            }
+        }
     }
 }

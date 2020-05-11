@@ -7,7 +7,7 @@ package ZeroEvenOdd;
 
 class ZeroEvenOddTest {
     public static void main(String[] args) {
-        IZeroEvenOdd zeroEvenOdd = new ZeroEvenOdd1(5);
+        IZeroEvenOdd zeroEvenOdd = new ZeroEvenOdd_1(5);
 
         Thread threadZero = new Thread(new Runnable() {
             @Override

@@ -8,21 +8,22 @@ import java.util.function.IntConsumer;
  * @date 2020/5/11 10:19
  */
 
-class ZeroEvenOdd1 implements IZeroEvenOdd{
-    private int n;
-    private Semaphore mSemaphoreZero = new Semaphore(1);
-    private Semaphore mSemaphoreEven = new Semaphore(0);
-    private Semaphore mSemaphoreOdd = new Semaphore(0);
-    public ZeroEvenOdd1(int n) {
+class ZeroEvenOdd_1 implements IZeroEvenOdd {
+    private final int n;
+    private final Semaphore mSemaphoreZero = new Semaphore(1);
+    private final Semaphore mSemaphoreEven = new Semaphore(0);
+    private final Semaphore mSemaphoreOdd = new Semaphore(0);
+
+    public ZeroEvenOdd_1(int n) {
         this.n = n;
     }
 
     // printNumber.accept(x) outputs "x", where x is an integer.
     public void zero(IntConsumer printNumber) throws InterruptedException {
-        for (int i=0;i<n;i++){
+        for (int i = 0; i < n; i++) {
             mSemaphoreZero.acquire(1);
             printNumber.accept(0);
-            if (i%2!=0){
+            if (i % 2 != 0) {
                 mSemaphoreEven.release();
             }else{
                 mSemaphoreOdd.release();
